@@ -2,8 +2,8 @@ import re
 import json
 import os
 
-md_file_path = r"c:\Users\Maks (KERNEL)\Downloads\backlog_presentation_v34_tags.md"
-json_output_path = r"C:\Users\Maks (KERNEL)\.gemini\antigravity-ide\scratch\backlog-dashboard\goals.json"
+md_file_path = "backlog_presentation_v34_tags.md"
+json_output_path = "goals.json"
 
 mapping = {
     "Перехід на хмарну версію ТМ Калк": "ТМ Калк. Хмарна версія",
