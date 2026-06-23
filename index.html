@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESAUL. IT проєкти Логістики</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Google Material Symbols (Icons) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    
+    <link rel="stylesheet" href="style.css?v=3">
+</head>
+<body>
+    <!-- Background Glow Blobs -->
+    <div class="glow-blob blob-1"></div>
+    <div class="glow-blob blob-2"></div>
+    
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-area">
+                <span class="material-symbols-rounded logo-icon">flowsheet</span>
+                <div>
+                    <h1>ESAUL. IT проєкти Логістики</h1>
+                    <p class="subtitle">Цілі та задачі</p>
+                </div>
+            </div>
+            <div class="stats-overview" id="statsOverview">
+                <div class="stat-card">
+                    <span class="stat-num" id="statTotal">0</span>
+                    <span class="stat-label">Цілей всього</span>
+                </div>
+                <div class="stat-card accent-plan">
+                    <span class="stat-num" id="statPlan">0</span>
+                    <span class="stat-label">В плані</span>
+                </div>
+                <div class="stat-card accent-backlog">
+                    <span class="stat-num" id="statBacklog">0</span>
+                    <span class="stat-label">У беклозі</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Control Bar (Search & Filters) -->
+        <section class="controls-section">
+            <div class="search-bar-wrapper">
+                <span class="material-symbols-rounded search-icon">search</span>
+                <input type="text" id="searchInput" placeholder="Шукати за назвою, описом або замовником..." autocomplete="off">
+            </div>
+            
+            <div class="view-switcher" id="viewSwitcher">
+                <button class="view-btn active" id="viewCardsBtn" title="Відобразити картками">
+                    <span class="material-symbols-rounded">grid_view</span>
+                </button>
+                <button class="view-btn" id="viewListBtn" title="Відобразити списком">
+                    <span class="material-symbols-rounded">view_list</span>
+                </button>
+            </div>
+            
+            <div class="filter-toggle-btn" id="filterToggleBtn">
+                <span class="material-symbols-rounded">filter_list</span>
+                <span>Фільтри</span>
+                <span class="filter-badge" id="filterBadge">0</span>
+            </div>
+        </section>
+
+        <!-- Expandable Filters Panel -->
+        <section class="filters-panel" id="filtersPanel">
+            <div class="filters-grid">
+                <!-- System -->
+                <div class="filter-group">
+                    <label>Система</label>
+                    <div class="select-wrapper">
+                        <select id="filterSystem">
+                            <option value="">Усі системи</option>
+                            <option value="NAV">NAV</option>
+                            <option value="TH">TransitHub (TH)</option>
+                            <option value="NAV+TH">NAV + TH</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Status -->
+                <div class="filter-group">
+                    <label>Статус цілі</label>
+                    <div class="select-wrapper">
+                        <select id="filterStatus">
+                            <option value="">Усі статуси</option>
+                            <option value="План">План</option>
+                            <option value="Беклог">Беклог</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Customer (Dynamic) -->
+                <div class="filter-group">
+                    <label>Замовник</label>
+                    <div class="select-wrapper">
+                        <select id="filterCustomer">
+                            <option value="">Усі замовники</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Business Unit (Dynamic) -->
+                <div class="filter-group">
+                    <label>Бізнес-напрям</label>
+                    <div class="select-wrapper">
+                        <select id="filterBusinessUnit">
+                            <option value="">Усі напрями</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Value -->
+                <div class="filter-group">
+                    <label>Цінність (1-5)</label>
+                    <div class="pills-selector" id="valueSelector">
+                        <button class="pill-btn" data-value="1">1</button>
+                        <button class="pill-btn" data-value="2">2</button>
+                        <button class="pill-btn" data-value="3">3</button>
+                        <button class="pill-btn" data-value="4">4</button>
+                        <button class="pill-btn" data-value="5">5</button>
+                    </div>
+                </div>
+
+                <!-- Difficulty -->
+                <div class="filter-group">
+                    <label>Складність (1-5)</label>
+                    <div class="pills-selector" id="difficultySelector">
+                        <button class="pill-btn" data-value="1">1</button>
+                        <button class="pill-btn" data-value="2">2</button>
+                        <button class="pill-btn" data-value="3">3</button>
+                        <button class="pill-btn" data-value="4">4</button>
+                        <button class="pill-btn" data-value="5">5</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="filters-actions">
+                <button class="action-btn-secondary" id="clearFiltersBtn">Очистити все</button>
+            </div>
+        </section>
+
+        <!-- Grid of Cards -->
+        <main class="goals-grid" id="goalsGrid">
+            <!-- Loading state -->
+            <div class="loading-state">
+                <div class="spinner"></div>
+                <p>Завантаження цілей беклогу...</p>
+            </div>
+        </main>
+        
+        <!-- List (Table) View -->
+        <div class="table-view-container" id="tableViewContainer" style="display: none;">
+            <div class="table-scroll-wrapper">
+                <table class="goals-table">
+                    <thead>
+                        <tr>
+                            <th>Ціль проєкту</th>
+                            <th>Система</th>
+                            <th>Замовник</th>
+                            <th>Бізнес-напрям</th>
+                            <th class="text-center">Цінність</th>
+                            <th class="text-center">Складність</th>
+                            <th>Статус</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Table rows will be added dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <span class="material-symbols-rounded empty-icon">search_off</span>
+            <h3>Нічого не знайдено</h3>
+            <p>Спробуйте змінити пошуковий запит або скинути фільтри.</p>
+            <button class="action-btn" id="resetFiltersEmptyBtn">Скинути всі фільтри</button>
+        </div>
+    </div>
+
+    <!-- Side Drawer (Detail Panel) -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <div class="detail-drawer" id="detailDrawer">
+        <div class="drawer-header">
+            <div class="drawer-header-left">
+                <span class="system-tag-large" id="drawerSystem">NAV</span>
+                <span class="status-tag-large" id="drawerStatus">План</span>
+            </div>
+            <button class="close-drawer-btn" id="closeDrawerBtn">
+                <span class="material-symbols-rounded">close</span>
+            </button>
+        </div>
+        
+        <div class="drawer-content" id="drawerContent">
+            <h2 id="drawerTitle">Назва цілі завантажується...</h2>
+            
+            <!-- Quick Info Tags -->
+            <div class="drawer-tags-container">
+                <div class="drawer-info-tag">
+                    <span class="material-symbols-rounded">person</span>
+                    <div>
+                        <span class="tag-lbl">Замовник</span>
+                        <span class="tag-val" id="drawerCustomer">-</span>
+                    </div>
+                </div>
+                <div class="drawer-info-tag">
+                    <span class="material-symbols-rounded">domain</span>
+                    <div>
+                        <span class="tag-lbl">Бізнес-напрям</span>
+                        <span class="tag-val" id="drawerBusinessUnit">-</span>
+                    </div>
+                </div>
+                <div class="drawer-info-tag">
+                    <span class="material-symbols-rounded">star</span>
+                    <div>
+                        <span class="tag-lbl">Цінність</span>
+                        <span class="tag-val score-val" id="drawerValue">-</span>
+                    </div>
+                </div>
+                <div class="drawer-info-tag">
+                    <span class="material-symbols-rounded">construction</span>
+                    <div>
+                        <span class="tag-lbl">Складність</span>
+                        <span class="tag-val score-val" id="drawerDifficulty">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description Section -->
+            <div class="drawer-section">
+                <h3><span class="material-symbols-rounded sec-icon">description</span>Опис змін</h3>
+                <div class="asis-tobe-container">
+                    <div class="asis-card">
+                        <div class="card-badge asis-badge">Як зараз (AS-IS)</div>
+                        <p id="drawerAsIs">-</p>
+                    </div>
+                    <div class="tobecard">
+                        <div class="card-badge tobe-badge">Після автоматизації (TO-BE)</div>
+                        <p id="drawerToBe">-</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comparison Table Section -->
+            <div class="drawer-section" id="drawerTableSection">
+                <h3><span class="material-symbols-rounded sec-icon">table_chart</span>Порівняльна таблиця (AS-IS vs TO-BE)</h3>
+                <div class="table-scroll-wrapper">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Процес</th>
+                                <th class="col-asis">Як зараз</th>
+                                <th class="col-tobe">Після автоматизації</th>
+                            </tr>
+                        </thead>
+                        <tbody id="drawerTableBody">
+                            <!-- Rows added dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Value & Effects Section -->
+            <div class="drawer-section">
+                <div class="split-section">
+                    <div class="business-value-col" id="drawerValueCol">
+                        <h3><span class="material-symbols-rounded sec-icon">trending_up</span>Цінність для бізнесу</h3>
+                        <ul class="styled-list" id="drawerValueList">
+                            <!-- Bullet points -->
+                        </ul>
+                    </div>
+                    <div class="effects-col" id="drawerEffectsCol">
+                        <h3><span class="material-symbols-rounded sec-icon">electric_bolt</span>Очікувані ефекти</h3>
+                        <ul class="styled-list effects-list" id="drawerEffectsList">
+                            <!-- Effects -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prerequisites Section -->
+            <div class="drawer-section" id="drawerPrereqSection" style="display: none;">
+                <div class="prereq-banner">
+                    <span class="material-symbols-rounded banner-icon">warning</span>
+                    <div>
+                        <h4>Передумова реалізації</h4>
+                        <p id="drawerPrerequisites">-</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
