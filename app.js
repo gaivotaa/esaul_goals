@@ -62,7 +62,7 @@ const drawerPrerequisites = document.getElementById('drawerPrerequisites');
 // Load Data
 async function loadGoals() {
     try {
-        const response = await fetch('goals.json');
+        const response = await fetch('goals.json?t=' + new Date().getTime());
         goalsData = await response.json();
         
         initializeFilters();
